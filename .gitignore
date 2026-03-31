@@ -1,1 +1,29 @@
+# Environment
 .env
+.env.local
+.env*.local
+
+# Next.js
+.next/
+out/
+build/
+
+# Dependencies
+node_modules/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel
+.vercel/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+*.log
+
+# shop.db is intentionally NOT listed — keep it tracked

@@ -6,7 +6,10 @@
       "Bash(sqlite3 \"C:/Users/carso/OneDrive - Brigham Young University/9th Semester/IS 455 Keith/Deployment_17.11/shop.db\" \".schema\")",
       "Bash(node -e \":*)",
       "Bash(node:*)",
-      "Bash(npm --version)"
+      "Bash(npm --version)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx next:*)"
     ]
   }
 }
