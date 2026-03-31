@@ -10,6 +10,8 @@ build/
 
 # Dependencies
 node_modules/
+.venv/
+__pycache__/
 
 # TypeScript
 *.tsbuildinfo
@@ -17,6 +19,10 @@ next-env.d.ts
 
 # Vercel
 .vercel/
+
+# IDEs
+.vscode/
+.idea/
 
 # OS
 .DS_Store
@@ -26,4 +32,8 @@ Thumbs.db
 npm-debug.log*
 *.log
 
-# shop.db is intentionally NOT listed — keep it tracked
+# Project specific
+pdf_content.txt
+shop.db
+*.md
+*.txt

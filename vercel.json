@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "src/app/api/score/route.ts": {
-      "maxDuration": 30
-    }
-  }
-}

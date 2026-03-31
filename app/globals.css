@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-silver-50: #f3f3f1;
+  --color-silver-100: #e8e6e3;
+  --color-silver-200: #d0cdc8;
+  --color-silver-300: #b9b4ac;
+  --color-silver-400: #a19b91;
+  --color-silver-500: #8a8275;
+  --color-silver-600: #6e685e;
+  --color-silver-700: #534e46;
+  --color-silver-800: #37342f;
+  --color-silver-900: #1c1a17;
+  --color-silver-950: #131210;
+
+  --color-deep-mocha-50: #f3f1f2;
+  --color-deep-mocha-100: #e7e4e4;
+  --color-deep-mocha-200: #cfc9ca;
+  --color-deep-mocha-300: #b7aeaf;
+  --color-deep-mocha-400: #9f9394;
+  --color-deep-mocha-500: #87787a;
+  --color-deep-mocha-600: #6c6061;
+  --color-deep-mocha-700: #514849;
+  --color-deep-mocha-800: #363031;
+  --color-deep-mocha-900: #1b1818;
+  --color-deep-mocha-950: #131111;
+
+  --color-cerulean-50: #e7f8fe;
+  --color-cerulean-100: #cef0fd;
+  --color-cerulean-200: #9ee2fa;
+  --color-cerulean-300: #6dd3f8;
+  --color-cerulean-400: #3cc4f6;
+  --color-cerulean-500: #0bb6f4;
+  --color-cerulean-600: #0991c3;
+  --color-cerulean-700: #076d92;
+  --color-cerulean-800: #054961;
+  --color-cerulean-900: #022431;
+  --color-cerulean-950: #021922;
+
+  --color-lobster-pink-50: #faebeb;
+  --color-lobster-pink-100: #f4d7d7;
+  --color-lobster-pink-200: #eaaeaf;
+  --color-lobster-pink-300: #df8688;
+  --color-lobster-pink-400: #d45e60;
+  --color-lobster-pink-500: #c93638;
+  --color-lobster-pink-600: #a12b2d;
+  --color-lobster-pink-700: #792022;
+  --color-lobster-pink-800: #511516;
+  --color-lobster-pink-900: #280b0b;
+  --color-lobster-pink-950: #1c0708;
+
+  --color-prussian-blue-50: #e9effb;
+  --color-prussian-blue-100: #d4e0f7;
+  --color-prussian-blue-200: #a8c0f0;
+  --color-prussian-blue-300: #7da1e8;
+  --color-prussian-blue-400: #5281e0;
+  --color-prussian-blue-500: #2662d9;
+  --color-prussian-blue-600: #1f4ead;
+  --color-prussian-blue-700: #173b82;
+  --color-prussian-blue-800: #0f2757;
+  --color-prussian-blue-900: #08142b;
+  --color-prussian-blue-950: #050e1e;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Light Mode Base Variables using Silver palette */
+  --background: var(--color-silver-50);
+  --foreground: var(--color-silver-950);
+  --card: #ffffff;
+  --card-foreground: var(--color-silver-900);
+  --border: var(--color-silver-200);
+}
+
+.dark {
+  /* Dark Mode Base Variables using Prussian Blue palette */
+  --background: var(--color-prussian-blue-950);
+  --foreground: var(--color-silver-50);
+  --card: var(--color-prussian-blue-900);
+  --card-foreground: var(--color-silver-100);
+  --border: var(--color-prussian-blue-800);
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
