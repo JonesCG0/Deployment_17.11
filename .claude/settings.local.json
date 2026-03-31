@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(sqlite3 shop.db \".schema\")"
+      "Bash(sqlite3 shop.db \".schema\")",
+      "Bash(find . -maxdepth 2 -not -path */.git/* -not -path */node_modules/*)",
+      "Bash(sqlite3 \"C:/Users/carso/OneDrive - Brigham Young University/9th Semester/IS 455 Keith/Deployment_17.11/shop.db\" \".schema\")",
+      "Bash(node -e \":*)",
+      "Bash(node:*)",
+      "Bash(npm --version)"
     ]
   }
 }
