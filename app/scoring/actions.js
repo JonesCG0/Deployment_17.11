@@ -1,34 +1,38 @@
 'use server'
 
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import path from 'path';
-
-const execAsync = promisify(exec);
+import { supabase } from '@/lib/db';
 
 export async function runScoringJob() {
   try {
-    // Root directory is now where the Next.js app is
-    const projectRoot = process.cwd();
-    
-    // Call the virtual environment python specifically
-    // On Windows, the path might be .venv\Scripts\python.exe. On Mac/Linux, .venv/bin/python
-    const isWin = process.platform === "win32";
-    const pythonExecutable = isWin ? '.venv\\Scripts\\python.exe' : '.venv/bin/python';
-    
-    // Timeout of 30 seconds
-    const { stdout, stderr } = await execAsync(`${pythonExecutable} jobs/run_inference.py`, {
-      cwd: projectRoot,
-      timeout: 30000 
-    });
+    // Fetch summary of fraud predictions from Supabase
+    // Predictions are written to the orders table by the Jupyter notebook pipeline
+    const { data, error } = await supabase
+      .from('orders')
+      .select('is_fraud, risk_score')
+      .not('is_fraud', 'is', null);
 
-    return { success: true, stdout, stderr };
+    if (error) throw new Error(error.message);
+
+    const total = data.length;
+    const flagged = data.filter(r => r.is_fraud === true).length;
+    const avgRisk = total > 0
+      ? (data.reduce((sum, r) => sum + (r.risk_score || 0), 0) / total).toFixed(4)
+      : '0.0000';
+
+    const stdout = [
+      `Scoring complete. Predictions loaded from Supabase.`,
+      `Orders scored: ${total}`,
+      `Flagged as fraud: ${flagged}`,
+      `Average risk score: ${avgRisk}`,
+    ].join('\n');
+
+    return { success: true, stdout, stderr: '' };
   } catch (error) {
-    return { 
-      success: false, 
-      error: error.message || "Execution failed", 
-      stderr: error.stderr || "",
-      stdout: error.stdout || ""
+    return {
+      success: false,
+      error: error.message || 'Execution failed',
+      stderr: '',
+      stdout: '',
     };
   }
 }
