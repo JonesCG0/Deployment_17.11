@@ -84,32 +84,34 @@ export default async function OrderDetailPage({ params }) {
         <div className="px-6 py-5 border-b border-border bg-silver-50/50 dark:bg-prussian-blue-900/50">
           <h2 className="text-lg font-bold">Order Items</h2>
         </div>
-        <table className="min-w-full divide-y divide-border">
-          <thead className="bg-card">
-            <tr>
-              <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Product</th>
-              <th className="px-6 py-4 text-center text-xs font-bold text-foreground/50 uppercase tracking-wider">Quantity</th>
-              <th className="px-6 py-4 text-right text-xs font-bold text-foreground/50 uppercase tracking-wider">Unit Price</th>
-              <th className="px-6 py-4 text-right text-xs font-bold text-foreground/50 uppercase tracking-wider">Total</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {items.map((item, idx) => (
-              <tr key={idx} className="hover:bg-silver-100/50 dark:hover:bg-prussian-blue-800/20 transition-colors">
-                <td className="px-6 py-5 whitespace-nowrap text-sm font-bold">{item.product_name}</td>
-                <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-foreground/70 text-center">{item.quantity}</td>
-                <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-foreground/60 text-right">${(item.price || 0).toFixed(2)}</td>
-                <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-right">${(item.line_total || 0).toFixed(2)}</td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-border">
+            <thead className="bg-card">
+              <tr>
+                <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Product</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-foreground/50 uppercase tracking-wider">Quantity</th>
+                <th className="px-6 py-4 text-right text-xs font-bold text-foreground/50 uppercase tracking-wider">Unit Price</th>
+                <th className="px-6 py-4 text-right text-xs font-bold text-foreground/50 uppercase tracking-wider">Total</th>
               </tr>
-            ))}
-          </tbody>
-          <tfoot className="bg-silver-50 dark:bg-prussian-blue-900/50">
-            <tr>
-              <td colSpan="3" className="px-6 py-5 text-right font-bold text-foreground/60 uppercase">Subtotal</td>
-              <td className="px-6 py-5 text-right font-black text-xl text-cerulean-600 dark:text-cerulean-400">${(order.order_total || 0).toFixed(2)}</td>
-            </tr>
-          </tfoot>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {items.map((item, idx) => (
+                <tr key={idx} className="hover:bg-silver-100/50 dark:hover:bg-prussian-blue-800/20 transition-colors">
+                  <td className="px-6 py-5 whitespace-nowrap text-sm font-bold">{item.product_name}</td>
+                  <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-foreground/70 text-center">{item.quantity}</td>
+                  <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-foreground/60 text-right">${(item.price || 0).toFixed(2)}</td>
+                  <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-right">${(item.line_total || 0).toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot className="bg-silver-50 dark:bg-prussian-blue-900/50">
+              <tr>
+                <td colSpan="3" className="px-6 py-5 text-right font-bold text-foreground/60 uppercase">Subtotal</td>
+                <td className="px-6 py-5 text-right font-black text-xl text-cerulean-600 dark:text-cerulean-400">${(order.order_total || 0).toFixed(2)}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
   );

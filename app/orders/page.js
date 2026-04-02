@@ -35,40 +35,42 @@ export default async function OrdersPage() {
       </div>
       
       <div className="bg-card shadow-sm rounded-2xl border border-border overflow-hidden">
-        <table className="min-w-full divide-y divide-border">
-          <thead className="bg-silver-50/50 dark:bg-prussian-blue-900/50">
-            <tr>
-              <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Order ID</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Date Time</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Total Value</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-4 text-right text-xs font-bold text-foreground/50 uppercase tracking-wider">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {orders.map(o => (
-              <tr key={o.order_id} className="hover:bg-silver-100/50 dark:hover:bg-prussian-blue-800/20 transition-colors group">
-                <td className="px-6 py-5 whitespace-nowrap text-sm font-bold text-foreground">
-                  #{o.order_id}
-                </td>
-                <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-foreground/60">
-                  {new Date(o.order_datetime).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
-                </td>
-                <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-foreground">
-                  ${(o.order_total || 0).toFixed(2)}
-                </td>
-                <td className="px-6 py-5 whitespace-nowrap">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-deep-mocha-100 text-deep-mocha-800 dark:bg-deep-mocha-900/50 dark:text-deep-mocha-300 ring-1 ring-deep-mocha-600/20 shadow-sm">Processing</span>
-                </td>
-                <td className="px-6 py-5 whitespace-nowrap text-right text-sm font-bold">
-                  <Link href={`/orders/${o.order_id}`} className="inline-flex items-center gap-1.5 text-cerulean-600 dark:text-cerulean-400 hover:text-cerulean-700 dark:hover:text-cerulean-300 bg-cerulean-50 dark:bg-cerulean-900/30 px-3 py-1.5 rounded-lg opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none focus:ring-2 focus:ring-cerulean-500/50">
-                    <Eye className="w-4 h-4" /> View Details
-                  </Link>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-border">
+            <thead className="bg-silver-50/50 dark:bg-prussian-blue-900/50">
+              <tr>
+                <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Order ID</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Date Time</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Total Value</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-right text-xs font-bold text-foreground/50 uppercase tracking-wider">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {orders.map(o => (
+                <tr key={o.order_id} className="hover:bg-silver-100/50 dark:hover:bg-prussian-blue-800/20 transition-colors group">
+                  <td className="px-6 py-5 whitespace-nowrap text-sm font-bold text-foreground">
+                    #{o.order_id}
+                  </td>
+                  <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-foreground/60">
+                    {new Date(o.order_datetime).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
+                  </td>
+                  <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-foreground">
+                    ${(o.order_total || 0).toFixed(2)}
+                  </td>
+                  <td className="px-6 py-5 whitespace-nowrap">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-deep-mocha-100 text-deep-mocha-800 dark:bg-deep-mocha-900/50 dark:text-deep-mocha-300 ring-1 ring-deep-mocha-600/20 shadow-sm">Processing</span>
+                  </td>
+                  <td className="px-6 py-5 whitespace-nowrap text-right text-sm font-bold">
+                    <Link href={`/orders/${o.order_id}`} className="inline-flex items-center gap-1.5 text-cerulean-600 dark:text-cerulean-400 hover:text-cerulean-700 dark:hover:text-cerulean-300 bg-cerulean-50 dark:bg-cerulean-900/30 px-3 py-1.5 rounded-lg opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none focus:ring-2 focus:ring-cerulean-500/50">
+                      <Eye className="w-4 h-4" /> View Details
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {orders.length === 0 && (
           <div className="p-16 text-center text-foreground/50 flex flex-col items-center">
             <ShoppingCart className="w-16 h-16 text-foreground/30 mb-4" />
