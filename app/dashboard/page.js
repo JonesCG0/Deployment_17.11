@@ -80,32 +80,34 @@ export default async function DashboardPage() {
             <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
-        <table className="min-w-full divide-y divide-border">
-          <thead className="bg-card">
-            <tr>
-              <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Order ID</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Date</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Total Value</th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Status</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {recentOrders && recentOrders.map(o => (
-              <tr key={o.order_id} className="hover:bg-silver-100/50 dark:hover:bg-prussian-blue-800/20 transition-colors">
-                <td className="px-6 py-5 whitespace-nowrap text-sm font-bold text-cerulean-600 dark:text-cerulean-400">
-                  <Link href={`/orders/${o.order_id}`} className="hover:underline flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-cerulean-500/50 rounded-md decoration-2 underline-offset-4">
-                    #{o.order_id} <ArrowRightCircle className="w-4 h-4 opacity-50" />
-                  </Link>
-                </td>
-                <td className="px-6 py-5 text-sm text-foreground/80 font-medium">{new Date(o.order_datetime).toLocaleString()}</td>
-                <td className="px-6 py-5 whitespace-nowrap text-sm font-bold text-foreground">${(o.order_total || 0).toFixed(2)}</td>
-                <td className="px-6 py-5 whitespace-nowrap text-sm">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-deep-mocha-100 text-deep-mocha-800 dark:bg-deep-mocha-900/50 dark:text-deep-mocha-300 ring-1 ring-deep-mocha-600/20 shadow-sm">Processing</span>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-border">
+            <thead className="bg-card">
+              <tr>
+                <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Order ID</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Total Value</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {recentOrders && recentOrders.map(o => (
+                <tr key={o.order_id} className="hover:bg-silver-100/50 dark:hover:bg-prussian-blue-800/20 transition-colors">
+                  <td className="px-6 py-5 whitespace-nowrap text-sm font-bold text-cerulean-600 dark:text-cerulean-400">
+                    <Link href={`/orders/${o.order_id}`} className="hover:underline flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-cerulean-500/50 rounded-md decoration-2 underline-offset-4">
+                      #{o.order_id} <ArrowRightCircle className="w-4 h-4 opacity-50" />
+                    </Link>
+                  </td>
+                  <td className="px-6 py-5 text-sm text-foreground/80 font-medium">{new Date(o.order_datetime).toLocaleString()}</td>
+                  <td className="px-6 py-5 whitespace-nowrap text-sm font-bold text-foreground">${(o.order_total || 0).toFixed(2)}</td>
+                  <td className="px-6 py-5 whitespace-nowrap text-sm">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-deep-mocha-100 text-deep-mocha-800 dark:bg-deep-mocha-900/50 dark:text-deep-mocha-300 ring-1 ring-deep-mocha-600/20 shadow-sm">Processing</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {(!recentOrders || recentOrders.length === 0) && (
           <div className="p-12 text-center text-foreground/50">
             <ShoppingBag className="w-12 h-12 mx-auto text-foreground/20 mb-4" />

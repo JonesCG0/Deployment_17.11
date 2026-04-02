@@ -4,6 +4,7 @@ import CustomerBanner from "./components/CustomerBanner";
 import Link from "next/link";
 import { ThemeProvider } from "./components/ThemeProvider";
 import ThemeToggle from "./components/ThemeToggle";
+import MobileNavbar from "./components/MobileNavbar";
 import { 
   Building2, 
   LayoutDashboard, 
@@ -75,9 +76,10 @@ export default function RootLayout({ children }) {
             </div>
           </header>
 
-          <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative">
+          <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24 md:pb-10 relative">
             {children}
           </main>
+          <MobileNavbar />
         </ThemeProvider>
       </body>
     </html>
