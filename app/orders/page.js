@@ -2,7 +2,7 @@ import { supabase } from "@/lib/db";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ShoppingCart, Plus, Eye } from "lucide-react";
+import { ShoppingCart, Plus, Eye, CheckCircle2, XCircle, MinusCircle } from "lucide-react";
 
 export default async function OrdersPage() {
   const cookieStore = await cookies();
@@ -12,7 +12,7 @@ export default async function OrdersPage() {
   let orders = [];
   try {
     const { data: ordersData, error } = await supabase.from('orders')
-      .select('order_id, order_datetime, order_total')
+      .select('order_id, order_datetime, order_total, is_fraud')
       .eq('customer_id', customerId)
       .order('order_datetime', { ascending: false });
     
@@ -42,6 +42,7 @@ export default async function OrdersPage() {
                 <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Order ID</th>
                 <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Date Time</th>
                 <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Total Value</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Fraud</th>
                 <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Status</th>
                 <th className="px-6 py-4 text-right text-xs font-bold text-foreground/50 uppercase tracking-wider">Action</th>
               </tr>
@@ -57,6 +58,21 @@ export default async function OrdersPage() {
                   </td>
                   <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-foreground">
                     ${(o.order_total || 0).toFixed(2)}
+                  </td>
+                  <td className="px-6 py-5 whitespace-nowrap">
+                    {o.is_fraud === true ? (
+                      <span className="inline-flex items-center gap-1 text-lobster-pink-600 dark:text-lobster-pink-400 font-bold text-sm">
+                        <XCircle className="w-4 h-4" /> Yes
+                      </span>
+                    ) : o.is_fraud === false ? (
+                      <span className="inline-flex items-center gap-1 text-cerulean-600 dark:text-cerulean-400 font-bold text-sm">
+                        <CheckCircle2 className="w-4 h-4" /> No
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-foreground/40 text-sm">
+                        <MinusCircle className="w-4 h-4" /> —
+                      </span>
+                    )}
                   </td>
                   <td className="px-6 py-5 whitespace-nowrap">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-deep-mocha-100 text-deep-mocha-800 dark:bg-deep-mocha-900/50 dark:text-deep-mocha-300 ring-1 ring-deep-mocha-600/20 shadow-sm">Processing</span>
