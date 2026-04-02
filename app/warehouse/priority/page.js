@@ -6,34 +6,31 @@ export const dynamic = 'force-dynamic';
 export default async function PriorityQueuePage() {
   let queue = [];
   try {
-    const { data: predictions } = await supabase.from('order_predictions')
+    const { data: ordersData } = await supabase.from('orders')
       .select(`
-        late_delivery_probability,
-        predicted_late_delivery,
-        prediction_timestamp,
-        orders (
-          order_id,
-          order_datetime,
-          order_total,
-          customers (
-            customer_id,
-            full_name
-          )
+        order_id,
+        order_datetime,
+        order_total,
+        risk_score,
+        is_fraud,
+        customers (
+          customer_id,
+          full_name
         )
       `)
-      .order('late_delivery_probability', { ascending: false })
+      .not('risk_score', 'is', null)
+      .order('risk_score', { ascending: false })
       .limit(50);
       
-    if (predictions) {
-      queue = predictions.map(p => ({
-        order_id: p.orders?.order_id,
-        order_datetime: p.orders?.order_datetime,
-        order_total: p.orders?.order_total,
-        customer_id: p.orders?.customers?.customer_id,
-        customer_name: p.orders?.customers?.full_name,
-        late_delivery_probability: p.late_delivery_probability,
-        predicted_late_delivery: p.predicted_late_delivery,
-        prediction_timestamp: p.prediction_timestamp
+    if (ordersData) {
+      queue = ordersData.map(o => ({
+        order_id: o.order_id,
+        order_datetime: o.order_datetime,
+        order_total: o.order_total,
+        customer_id: o.customers?.customer_id,
+        customer_name: o.customers?.full_name,
+        risk_score: o.risk_score,
+        is_fraud: o.is_fraud
       }));
       // Filter out those where ordering might have failed if relation is empty
       queue = queue.filter(q => q.order_id);
@@ -51,11 +48,11 @@ export default async function PriorityQueuePage() {
         <div className="relative z-10">
           <h1 className="text-3xl font-extrabold tracking-tight mb-2 flex items-center gap-3">
             <ShieldAlert className="w-8 h-8 text-lobster-pink-500" />
-            Late Delivery Priority Queue
+            Fraud Detection Priority Queue
           </h1>
           <p className="text-silver-300 max-w-2xl text-lg mt-4">
-            This operational dashboard displays unfulfilled orders prioritized by their probability of arriving late. 
-            The ML model evaluates warehouse factors to surface high-risk orders to the top of the queue for immediate action.
+            This operational dashboard displays orders prioritized by their probability of being fraudulent. 
+            The ML model evaluates transaction factors to surface high-risk orders to the top of the queue for immediate action.
           </p>
         </div>
       </div>
@@ -78,7 +75,7 @@ export default async function PriorityQueuePage() {
                 <th className="px-6 py-4 text-left text-xs font-bold text-foreground/50 uppercase tracking-wider">Order Date</th>
                 <th className="px-6 py-4 text-right text-xs font-bold text-foreground/50 uppercase tracking-wider">Value</th>
                 <th className="px-6 py-4 text-center text-xs font-bold text-lobster-pink-600 dark:text-lobster-pink-400 uppercase tracking-wider bg-lobster-pink-50/50 dark:bg-lobster-pink-950/20 rounded-tl-lg">Risk Score</th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-foreground/50 uppercase tracking-wider">Last Scored</th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-foreground/50 uppercase tracking-wider">Flagged</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -90,18 +87,26 @@ export default async function PriorityQueuePage() {
                   <td className="px-6 py-5 whitespace-nowrap text-sm font-bold text-foreground text-right">${(o.order_total||0).toFixed(2)}</td>
                   <td className="px-6 py-5 whitespace-nowrap text-center bg-lobster-pink-50/20 dark:bg-lobster-pink-950/10">
                      <span className={`px-3 py-1 rounded-md text-sm font-black shadow-sm flex items-center justify-center gap-1.5 w-fit mx-auto ${
-                       o.late_delivery_probability > 0.8 ? 'bg-lobster-pink-500 text-white' : 
-                       o.late_delivery_probability > 0.5 ? 'bg-deep-mocha-500 text-white' : 
+                       o.risk_score > 0.8 ? 'bg-lobster-pink-500 text-white' : 
+                       o.risk_score > 0.5 ? 'bg-deep-mocha-500 text-white' : 
                        'bg-cerulean-500 text-white'
                      }`}>
-                       {o.late_delivery_probability > 0.8 && <ShieldAlert className="w-4 h-4" />}
-                       {o.late_delivery_probability <= 0.8 && o.late_delivery_probability > 0.5 && <Activity className="w-4 h-4" />}
-                       {o.late_delivery_probability <= 0.5 && <ShieldCheck className="w-4 h-4" />}
-                       {(o.late_delivery_probability * 100).toFixed(1)}%
+                       {o.risk_score > 0.8 && <ShieldAlert className="w-4 h-4" />}
+                       {o.risk_score <= 0.8 && o.risk_score > 0.5 && <Activity className="w-4 h-4" />}
+                       {o.risk_score <= 0.5 && <ShieldCheck className="w-4 h-4" />}
+                       {(o.risk_score * 100).toFixed(1)}%
                      </span>
                   </td>
-                  <td className="px-6 py-5 whitespace-nowrap text-xs font-medium text-foreground/50 text-right">
-                    {new Date(o.prediction_timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short'})}
+                  <td className="px-6 py-5 whitespace-nowrap text-center">
+                    {o.is_fraud ? (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-lobster-pink-100 text-lobster-pink-800 dark:bg-lobster-pink-900/50 dark:text-lobster-pink-300">
+                        Yes
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-silver-100 text-silver-800 dark:bg-prussian-blue-800 dark:text-silver-300">
+                        No
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))}
